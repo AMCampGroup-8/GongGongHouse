@@ -1,0 +1,36 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  background-color: #effff8;
+}
+
+.header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 200px;
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  margin-top: 0;
+  padding: 0;
+}
+
+.content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 0;
+  margin-right: 0;
+  background-color: #fff;
+  border-radius: 0.5rem 0 0 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: margin-left 0.3s ease-in-out;
+}
+.contentInner {
+  padding: 0 1.5rem;
+  height: 100vh;
+  box-sizing: border-box;
+}
