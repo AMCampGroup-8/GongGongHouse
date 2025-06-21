@@ -23,14 +23,12 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '')
       },
       '/auth-service': {
-        target: 'http://localhost:8761',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/auth-service/, '/auth-service')
+        target: 'http://localhost:8000',
+        changeOrigin: true
       },
       '/user-service': {
-        target: 'http://localhost:8761',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/user-service/, '/user-service')
+        target: 'http://localhost:8000',
+        changeOrigin: true
       }
     }
   }
