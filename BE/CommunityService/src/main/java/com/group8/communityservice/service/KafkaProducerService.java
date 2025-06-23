@@ -1,6 +1,6 @@
 package com.group8.communityservice.service;
 
-import com.group8.communityservice.common.dto.board.BoardCreatedEventKafka;
+import com.group8.NotificationService.event.consumer.message.community.CommunityEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -11,22 +11,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KafkaProducerService {
 
-    private static final String TOPIC_BOARD_CREATED = "board-created-events"; // 토픽 이름
-
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    //게시글 생성 이벤트를 kafka로 전송
-    //@param event 전송할 BoardCreatedEvent 객체
-    public void sendBoardCreatedEvent(BoardCreatedEventKafka event) {
-        log.info("Sending BoardCreatedEvent to Kafka topic {}: {}", TOPIC_BOARD_CREATED, event);
-        kafkaTemplate.send(TOPIC_BOARD_CREATED, String.valueOf(event.getBoardId()), event)
+    public void sendCommunityEvent(CommunityEvent event) {
+        log.info("Kafka 토픽에 CommunityEvent 보내기 {}: {}", CommunityEvent.Topic, event);
+        kafkaTemplate.send(CommunityEvent.Topic, event.getPostId(), event)
                 .whenComplete((result, ex) -> {
                     if (ex == null) {
-                        log.info("Sent message successfully: offset={}, partition={}",
+                        log.info("메세지 보내기 성공: offset={}, partition={}",
                                 result.getRecordMetadata().offset(),
                                 result.getRecordMetadata().partition());
                     } else {
-                        log.error("Failed to send message: {}", ex.getMessage());
+                        log.error("메세지 보내기 실패: {}", ex.getMessage());
                     }
                 });
     }

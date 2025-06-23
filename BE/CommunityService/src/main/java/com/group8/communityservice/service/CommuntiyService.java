@@ -2,6 +2,7 @@
 package com.group8.communityservice.service;
 
 
+import com.group8.NotificationService.event.consumer.message.community.CommunityEvent;
 import com.group8.communityservice.common.dto.board.BoardCreateRequest;
 import com.group8.communityservice.common.dto.board.BoardCreatedEventKafka;
 import com.group8.communityservice.common.dto.board.BoardResponse;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,15 +56,13 @@ public class CommuntiyService {
                 .build();
         Board savedBoard = boardRepository.save(board);
 
-        BoardCreatedEventKafka event = new BoardCreatedEventKafka(
-                savedBoard.getId(),
-                savedBoard.getTitle(),
-                savedBoard.getContent(),
-                savedBoard.getMember().getId(),
-                savedBoard.getMember().getNickname(),
-                savedBoard.getCreatedAt()
+        /*CommunityEvent event = new CommunityEvent(
+                "BOARD_CREATED", // action 필드: 어떤 이벤트인지 명시
+                String.valueOf(member.getId()), // userId 필드: 작성자 ID
+                String.valueOf(savedBoard.getId()), // postId 필드: 게시글 ID
+                LocalDateTime.now() // eventTime 필드: 현재 시간
         );
-        kafkaProducerService.sendBoardCreatedEvent(event);
+        kafkaProducerService.sendCommunityEvent(event); // 변경된 메서드 호출*/
 
         return new BoardResponse(savedBoard);
     }
@@ -124,6 +124,16 @@ public class CommuntiyService {
                 .content(request.getContent())
                 .build();
         Comment savedComment = commentRepository.save(comment);
+
+        // CommunityEvent 생성 및 전송
+        CommunityEvent event = new CommunityEvent(
+                "COMMENT_CREATED",
+                String.valueOf(member.getId()),
+                String.valueOf(board.getId()),
+                LocalDateTime.now()
+        );
+        kafkaProducerService.sendCommunityEvent(event); // 변경된 메서드 호출
+
         return new CommentResponse(savedComment);
     }
 
