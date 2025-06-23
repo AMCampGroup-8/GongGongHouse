@@ -3,6 +3,7 @@ package com.group8.communityservice.service;
 
 
 import com.group8.communityservice.common.dto.board.BoardCreateRequest;
+import com.group8.communityservice.common.dto.board.BoardCreatedEventKafka;
 import com.group8.communityservice.common.dto.board.BoardResponse;
 import com.group8.communityservice.common.dto.board.BoardUpdateRequest;
 import com.group8.communityservice.common.dto.comment.CommentCreateRequest;
@@ -36,7 +37,8 @@ public class CommuntiyService {
 
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
-    private final MemberRepository memberRepository; // Member 엔티티를 찾기 위해 추가
+    private final MemberRepository memberRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     //게시글 작성
     @Transactional
@@ -51,6 +53,17 @@ public class CommuntiyService {
                 .member(member)
                 .build();
         Board savedBoard = boardRepository.save(board);
+
+        BoardCreatedEventKafka event = new BoardCreatedEventKafka(
+                savedBoard.getId(),
+                savedBoard.getTitle(),
+                savedBoard.getContent(),
+                savedBoard.getMember().getId(),
+                savedBoard.getMember().getNickname(),
+                savedBoard.getCreatedAt()
+        );
+        kafkaProducerService.sendBoardCreatedEvent(event);
+
         return new BoardResponse(savedBoard);
     }
 
