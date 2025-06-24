@@ -26,3 +26,4 @@ replay_pid*
 /BE/NotificationService
 /FE/*
 .DS_Store
+BE/.DS_Store
