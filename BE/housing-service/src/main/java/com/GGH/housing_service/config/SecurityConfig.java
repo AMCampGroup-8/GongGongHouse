@@ -22,7 +22,8 @@ public class SecurityConfig {
         .httpBasic(Customizer.withDefaults())
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/housing/**").authenticated()
+//            .requestMatchers("/housing/**").authenticated()
+            // ****토큰 확인 주석
             .anyRequest().permitAll()
         )
         .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
