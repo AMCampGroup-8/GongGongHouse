@@ -23,3 +23,6 @@
 hs_err_pid*
 replay_pid*
 /BE/api-gateway/.idea
+
+/BE/api-gateway/
+/BE/api-gateway/.gradle/
