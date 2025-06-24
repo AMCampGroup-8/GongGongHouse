@@ -19,6 +19,8 @@ public class CommunityEvent {
 
     private String postId;
 
+    private String postTitle;
+
     private LocalDateTime eventTime;
 
 }

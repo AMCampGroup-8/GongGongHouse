@@ -57,12 +57,12 @@ public class CommuntiyService {
         Board savedBoard = boardRepository.save(board);
 
         /*CommunityEvent event = new CommunityEvent(
-                "BOARD_CREATED", // action 필드: 어떤 이벤트인지 명시
-                String.valueOf(member.getId()), // userId 필드: 작성자 ID
-                String.valueOf(savedBoard.getId()), // postId 필드: 게시글 ID
-                LocalDateTime.now() // eventTime 필드: 현재 시간
+                "BOARD_CREATED", // 어떤 이벤트인지 명시
+                String.valueOf(member.getId()), // 작성자 ID
+                String.valueOf(savedBoard.getId()), // 게시글 ID
+                LocalDateTime.now() // 현재 시간
         );
-        kafkaProducerService.sendCommunityEvent(event); // 변경된 메서드 호출*/
+        kafkaProducerService.sendCommunityEvent(event); */
 
         return new BoardResponse(savedBoard);
     }
@@ -130,6 +130,7 @@ public class CommuntiyService {
                 "COMMENT_CREATED",
                 String.valueOf(member.getId()),
                 String.valueOf(board.getId()),
+                board.getTitle(),
                 LocalDateTime.now()
         );
         kafkaProducerService.sendCommunityEvent(event); // 변경된 메서드 호출
