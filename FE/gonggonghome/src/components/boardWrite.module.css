@@ -1,0 +1,110 @@
+/* src/components/BoardWrite.module.css */
+
+/* 게시글 작성 컨테이너 */
+.boardWriteContainer {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.boardWriteContainer h1 {
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-size: 2em;
+}
+
+/* 폼 스타일 */
+.boardWriteForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* 폼 그룹 간 간격 */
+}
+
+/* 각 폼 그룹 (라벨 + 입력 필드) */
+.formGroup {
+  text-align: left;
+}
+
+.formLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #34495e;
+}
+
+.formInput,
+.formTextarea {
+  width: calc(100% - 20px); /* 패딩 고려 */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+  box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
+}
+
+.formTextarea {
+  min-height: 120px; /* 최소 높이 */
+  resize: vertical; /* 세로 크기 조절 가능 */
+}
+
+/* 버튼 그룹 */
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* 버튼 간 간격 */
+  margin-top: 20px;
+}
+
+.submitButton,
+.cancelButton {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submitButton {
+  background-color: #28a745; /* 초록색 */
+  color: white;
+}
+
+.submitButton:hover {
+  background-color: #218838; /* 호버 시 더 진한 초록색 */
+}
+
+.cancelButton {
+  background-color: #6c757d; /* 회색 */
+  color: white;
+}
+
+.cancelButton:hover {
+  background-color: #5a6268; /* 호버 시 더 진한 회색 */
+}
+
+/* 성공/오류 메시지 */
+.successMessage,
+.errorMessage {
+  text-align: center;
+  font-size: 1.2em;
+  padding: 20px;
+  margin-top: 50px;
+  border-radius: 8px;
+}
+
+.successMessage {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.errorMessage {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}

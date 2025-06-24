@@ -1,0 +1,143 @@
+/* src/components/CommentSection.module.css */
+
+/* 댓글 섹션 전체 컨테이너 */
+.commentSection {
+  margin-top: 30px;
+  padding: 20px;
+  border-top: 1px solid #eee;
+  background-color: #fdfdfd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.commentSection h3 {
+  color: #34495e;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  text-align: center;
+}
+
+/* 댓글 목록 */
+.commentList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 각 댓글 항목 */
+.commentItem {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.commentContent {
+  margin-bottom: 5px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.commentAuthor {
+  color: #3498db;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.commentMeta {
+  display: block;
+  font-size: 0.85em;
+  color: #7f8c8d;
+  margin-bottom: 10px;
+}
+
+/* 댓글 수정/삭제 버튼 그룹 */
+.commentActions button {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 0.9em;
+  cursor: pointer;
+  margin-right: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.commentActions button:hover {
+  background-color: #e0e0e0;
+}
+
+.commentActions .deleteButton {
+  color: #e74c3c;
+}
+
+.commentActions .deleteButton:hover {
+  background-color: #f8d7da;
+}
+
+/* 댓글 작성 폼 */
+.commentForm {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.commentTextarea {
+  width: 100%; /* calc(100% - 20px) 대신 100%로 설정하고 padding은 box-sizing으로 처리 */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+  box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
+  resize: vertical; /* 세로 크기 조절 가능 */
+  min-height: 80px;
+}
+
+.commentForm .submitButton {
+  background-color: #2ecc71; /* 초록색 */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-end; /* 버튼을 오른쪽으로 정렬 */
+}
+
+.commentForm .submitButton:hover {
+  background-color: #27ae60;
+}
+
+/* 메시지 스타일 */
+.noCommentsMessage {
+  text-align: center;
+  color: #7f8c8d;
+  padding: 15px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.loadingMessage, .errorMessage {
+  text-align: center;
+  font-size: 1.2em;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+}
+
+.loadingMessage {
+  background-color: #e0f7fa;
+  color: #00796b;
+  border: 1px solid #b2ebf2;
+}
+
+.errorMessage {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
