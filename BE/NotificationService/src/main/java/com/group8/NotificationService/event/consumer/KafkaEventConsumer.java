@@ -4,9 +4,9 @@ package com.group8.NotificationService.event.consumer;
 import com.group8.NotificationService.event.consumer.message.bookmarked.BookmarkedEvent;
 import com.group8.NotificationService.event.consumer.message.community.CommunityEvent;
 import com.group8.NotificationService.event.consumer.message.likedtag.LikeTagEvent;
-import com.group8.NotificationService.service.BookmarkedNotificationService;
-import com.group8.NotificationService.service.CommunityNotificationService;
-import com.group8.NotificationService.service.LikeTagNotificationService;
+import com.group8.NotificationService.notification.application.BookmarkedNotificationService;
+import com.group8.NotificationService.notification.application.CommunityNotificationService;
+import com.group8.NotificationService.notification.application.LikeTagNotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -23,7 +23,7 @@ public class KafkaEventConsumer {
     private final CommunityNotificationService communityNotificationService;
 
 
-    @KafkaListener(topics = LikeTagEvent.Topic, properties = {JsonDeserializer.VALUE_DEFAULT_TYPE + "com.group8.NotificationService.event.consumer.message.likedtag.LikeTagEvent"})
+    @KafkaListener(topics = LikeTagEvent.Topic, properties = {JsonDeserializer.VALUE_DEFAULT_TYPE + "=com.group8.NotificationService.event.consumer.message.likedtag.LikeTagEvent"})
     void handleLiketagEventMessage(LikeTagEvent event, Acknowledgment ack) {
         log.info("LiketagEvent 처리. userId={}",event.getUserId());
 
@@ -33,7 +33,7 @@ public class KafkaEventConsumer {
         ack.acknowledge();
     }
 
-    @KafkaListener(topics = BookmarkedEvent.Topic, properties = {JsonDeserializer.VALUE_DEFAULT_TYPE + "com.group8.NotificationService.event.consumer.message.bookmarked.BookmarkedEvent"})
+    @KafkaListener(topics = BookmarkedEvent.Topic, properties = {JsonDeserializer.VALUE_DEFAULT_TYPE + "=com.group8.NotificationService.event.consumer.message.bookmarked.BookmarkedEvent"})
     void handleBookmarkedMessage(BookmarkedEvent event, Acknowledgment ack) {
         log.info("BookmarkedEvent 처리. userId={}",event.getUserId());
 
@@ -43,7 +43,7 @@ public class KafkaEventConsumer {
         ack.acknowledge();
     }
 
-    @KafkaListener(topics = CommunityEvent.Topic, properties = {JsonDeserializer.VALUE_DEFAULT_TYPE + "com.group8.NotificationService.event.consumer.message.community.CommunityEvent"})
+    @KafkaListener(topics = CommunityEvent.Topic, properties = {JsonDeserializer.VALUE_DEFAULT_TYPE + "=com.group8.NotificationService.event.consumer.message.community.CommunityEvent"})
     void handleCommunityEventMessage(CommunityEvent event, Acknowledgment ack) {
         log.info("CommunityEvent 처리. userId={}",event.getUserId());
 

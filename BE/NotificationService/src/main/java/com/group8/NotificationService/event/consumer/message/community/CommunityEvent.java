@@ -13,7 +13,9 @@ public class CommunityEvent {
 
     private String userId;
 
-    private String panId;
+    private String postId;
+
+    private String postTitle;
 
     private LocalDateTime eventTime;
 

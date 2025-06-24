@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build: ./BE/api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - member-service
+      - auth-service
+      - housing-service
+      - subscription-service
+      - community-service
+      - notification-service
+    networks:
+      - gonggong-net
+
+  member-service:
+    build: ./BE/member-service
+    ports:
+      - "8081:8081"
+    networks:
+      - gonggong-net
+
+  auth-service:
+    build: ./BE/auth-service
+    ports:
+      - "8082:8082"
+    networks:
+      - gonggong-net
+
+  housing-service:
+    build: ./BE/housing-service
+    ports:
+      - "8083:8083"
+    networks:
+      - gonggong-net
+
+  subscription-service:
+    build: ./BE/subscription-service
+    ports:
+      - "8084:8084"
+    networks:
+      - gonggong-net
+
+  community-service:
+    build: ./BE/community-service
+    ports:
+      - "8085:8085"
+    networks:
+      - gonggong-net
+
+  notification-service:
+    build: ./BE/notification-service
+    ports:
+      - "8086:8086"
+    networks:
+      - gonggong-net
+
+  frontend:
+    build: ./FE
+    ports:
+      - "3000:3000"
+    networks:
+      - gonggong-net
+    depends_on:
+      - api-gateway
+
+networks:
+  gonggong-net:

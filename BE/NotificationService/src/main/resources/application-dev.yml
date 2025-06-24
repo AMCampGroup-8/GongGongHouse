@@ -3,10 +3,10 @@ server:
 
 spring:
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: kafka:9092
 
   datasource:
-    url: jdbc:mysql://localhost:13306/notification?serverTimezone=UTC&useSSL=true&autoReconnect=true&useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://mysql:3306/notification?serverTimezone=UTC&useSSL=true&autoReconnect=true&useUnicode=true&characterEncoding=utf-8
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
