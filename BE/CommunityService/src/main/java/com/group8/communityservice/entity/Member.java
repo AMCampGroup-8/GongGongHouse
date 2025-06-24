@@ -1,4 +1,3 @@
-// src/main/java/com/group8/communityservice/member/entity/Member.java
 package com.group8.communityservice.entity;
 
 import lombok.AccessLevel;
