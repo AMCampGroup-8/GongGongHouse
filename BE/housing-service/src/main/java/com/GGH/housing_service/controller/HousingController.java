@@ -22,4 +22,9 @@ public class HousingController {
   public List<HousingDto> getAllHousing() {
     return housingService.getAllHousingList();
   }
+
+  @GetMapping("/{id}")
+  public HousingDto getHousingById(@PathVariable("id") Long id) {
+    return housingService.getHousingById(id);
+  }
 }

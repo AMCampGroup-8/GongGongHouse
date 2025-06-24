@@ -12,4 +12,11 @@ public class HousingService {
   public List<HousingDto> getAllHousingList() {
     return HousingMockData.getMockHousingList();
   }
+
+  public HousingDto getHousingById(Long id) {
+    return HousingMockData.getMockHousingList().stream()
+        .filter(h -> h.getId().equals(id))
+        .findFirst()
+        .orElse(null);
+  }
 }
