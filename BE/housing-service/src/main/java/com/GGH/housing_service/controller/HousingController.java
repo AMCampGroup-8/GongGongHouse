@@ -27,4 +27,9 @@ public class HousingController {
   public HousingDto getHousingById(@PathVariable("id") Long id) {
     return housingService.getHousingById(id);
   }
+
+  @GetMapping("/search")
+  public List<HousingDto> searchHousing(@RequestParam("query") String query) {
+    return housingService.searchHousingByQuery(query);
+  }
 }
