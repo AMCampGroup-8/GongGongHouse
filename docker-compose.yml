@@ -1,52 +1,55 @@
 version: '3.8'
 
 services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - gonggong-net
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - gonggong-net
+
   api-gateway:
     build: ./BE/api-gateway
     ports:
       - "8080:8080"
     depends_on:
-      - member-service
-      - auth-service
-      - housing-service
-      - subscription-service
-      - community-service
+      # - member-service
+      # - auth-service
+      # - housing-service
+      # - subscription-service
+      # - community-service
       - notification-service
     networks:
       - gonggong-net
 
-  member-service:
-    build: ./BE/member-service
+  notification-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: notification
+      MYSQL_USER: notification_user
+      MYSQL_PASSWORD: noti1234
     ports:
-      - "8081:8081"
-    networks:
-      - gonggong-net
-
-  auth-service:
-    build: ./BE/auth-service
-    ports:
-      - "8082:8082"
-    networks:
-      - gonggong-net
-
-  housing-service:
-    build: ./BE/housing-service
-    ports:
-      - "8083:8083"
-    networks:
-      - gonggong-net
-
-  subscription-service:
-    build: ./BE/subscription-service
-    ports:
-      - "8084:8084"
-    networks:
-      - gonggong-net
-
-  community-service:
-    build: ./BE/community-service
-    ports:
-      - "8085:8085"
+      - "3307:3306"
+    volumes:
+      - notification-db-data:/var/lib/mysql
     networks:
       - gonggong-net
 
@@ -54,8 +57,49 @@ services:
     build: ./BE/notification-service
     ports:
       - "8086:8086"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://notification-db:3306/notification
+      SPRING_DATASOURCE_USERNAME: notification_user
+      SPRING_DATASOURCE_PASSWORD: noti1234
+    depends_on:
+      - notification-db
     networks:
       - gonggong-net
+
+  # member-service:
+  #   build: ./BE/member-service
+  #   ports:
+  #     - "8081:8081"
+  #   networks:
+  #     - gonggong-net
+
+  # auth-service:
+  #   build: ./BE/auth-service
+  #   ports:
+  #     - "8082:8082"
+  #   networks:
+  #     - gonggong-net
+
+  # housing-service:
+  #   build: ./BE/housing-service
+  #   ports:
+  #     - "8083:8083"
+  #   networks:
+  #     - gonggong-net
+
+  # subscription-service:
+  #   build: ./BE/subscription-service
+  #   ports:
+  #     - "8084:8084"
+  #   networks:
+  #     - gonggong-net
+
+  # community-service:
+  #   build: ./BE/community-service
+  #   ports:
+  #     - "8085:8085"
+  #   networks:
+  #     - gonggong-net
 
   frontend:
     build: ./FE
@@ -68,3 +112,6 @@ services:
 
 networks:
   gonggong-net:
+
+volumes:
+  notification-db-data:
