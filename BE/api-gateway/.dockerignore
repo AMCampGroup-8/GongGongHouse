@@ -1,0 +1,10 @@
+.gradle
+# build 폴더는 전체 무시하되 libs/*.jar 만 포함
+build/*
+!build/libs/
+!build/libs/*.jar
+.vscode
+.git
+*.log
+*.md
+*.env
