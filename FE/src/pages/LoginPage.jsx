@@ -1,15 +1,46 @@
 // src/pages/LoginPage.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "@/apis/axiosInstance";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+// 카카오 로그인 설정 - 상수로 분리
+const KAKAO_REDIRECT_URI = "http://localhost/kakao-callback";
+// scope 파라미터 제거 - 기본 정보(닉네임, 카카오 ID)만 사용
+
 export default function LoginPage() {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [sdkReady, setSdkReady] = useState(false);
   const navigate = useNavigate();
+
+  // 카카오 SDK 초기화 확인
+  useEffect(() => {
+    // SDK가 로드되었고 초기화되었는지 확인
+    if (window.Kakao && window.Kakao.isInitialized()) {
+      setSdkReady(true);
+    } else {
+      // SDK 초기화 확인을 위한 간단한 폴링
+      const checkInterval = setInterval(() => {
+        if (window.Kakao && window.Kakao.isInitialized()) {
+          setSdkReady(true);
+          clearInterval(checkInterval);
+        }
+      }, 500);
+
+      // 10초 후에도 초기화되지 않으면 폴링 중지
+      setTimeout(() => {
+        clearInterval(checkInterval);
+        if (!sdkReady) {
+          console.warn("카카오 SDK 초기화 타임아웃");
+        }
+      }, 10000);
+
+      return () => clearInterval(checkInterval);
+    }
+  }, []);
 
   const handleLogin = async () => {
     if (!loginId || !password) {
@@ -39,7 +70,6 @@ export default function LoginPage() {
       localStorage.setItem("accessToken", token);
 
       setError("");
-      // alert("로그인 성공");
       navigate("/");
     } catch (err) {
       console.error("로그인 실패:", err);
@@ -48,6 +78,24 @@ export default function LoginPage() {
         console.error("상태 코드:", err.response.status);
       }
       setError("로그인에 실패했습니다. 아이디 또는 비밀번호를 확인하세요.");
+    }
+  };
+
+  // 카카오 로그인 핸들러 - 단순화됨
+  const handleKakaoLogin = () => {
+    if (!sdkReady) {
+      setError("카카오 로그인이 아직 준비되지 않았습니다. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+
+    try {
+      // scope 파라미터 없이 기본 정보만 요청
+      window.Kakao.Auth.authorize({
+        redirectUri: KAKAO_REDIRECT_URI
+      });
+    } catch (error) {
+      console.error("카카오 로그인 호출 오류:", error);
+      setError("카카오 로그인 실행 중 오류가 발생했습니다.");
     }
   };
 
@@ -86,15 +134,35 @@ export default function LoginPage() {
           />
 
           {error && (
-            <p className="text-red-500 text-sm mb-4 text-center">{error}</p>
+            <div className="text-center text-red-500 text-sm mb-4">
+              <p>{error}</p>
+            </div>
           )}
 
           <Button
-            className="w-full bg-[#3097db] hover:bg-[#5cbfb7] text-white font-semibold cursor-pointer"
+            className="w-full bg-[#3097db] hover:bg-[#5cbfb7] text-white font-semibold cursor-pointer mb-3"
             onClick={handleLogin}
           >
             로그인
           </Button>
+
+          <Button
+            className="w-full bg-[#FAE100] text-black font-bold hover:bg-[#f5d700] cursor-pointer flex items-center justify-center"
+            onClick={handleKakaoLogin}
+            disabled={!sdkReady}
+          >
+            <img 
+              src="/images/kakao_icon.png" 
+              alt="카카오 아이콘" 
+              className="w-5 h-5 mr-2" 
+            />
+            {!sdkReady ? "카카오 로그인 준비 중..." : "카카오로 시작하기"}
+          </Button>
+          {!sdkReady && (
+            <div className="flex justify-center mt-2">
+              <div className="w-4 h-4 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
         </div>
       </div>
     </div>

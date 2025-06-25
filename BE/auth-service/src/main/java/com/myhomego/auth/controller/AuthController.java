@@ -74,4 +74,17 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
+
+    @GetMapping("/kakao/callback")
+    public ResponseEntity<?> kakaoCallback(@RequestParam String code) {
+        log.info("카카오 인증 코드 받음: {}", code);
+        try {
+            Map<String, Object> result = authService.processKakaoLogin(code);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            log.error("카카오 로그인 처리 오류: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "카카오 로그인 처리 중 오류가 발생했습니다."));
+        }
+    }
 } 

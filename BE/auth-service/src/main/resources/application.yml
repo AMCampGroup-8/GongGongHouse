@@ -89,6 +89,11 @@ logging:
     feign: DEBUG
     org.springframework.cloud.loadbalancer: DEBUG
 
+kakao:
+  client:
+    id: acd0e18e87906431d12428f81c10fd6f
+    redirect-uri: http://localhost/kakao-callback
+
 ---
 spring:
   config:

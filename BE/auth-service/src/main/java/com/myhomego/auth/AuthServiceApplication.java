@@ -25,4 +25,9 @@ public class AuthServiceApplication {
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
+    
+    @Bean
+    public RestTemplate externalRestTemplate() {
+        return new RestTemplate();
+    }
 } 

@@ -83,4 +83,10 @@ logging:
     org.springframework.web: DEBUG
     org.springframework.cloud.openfeign: DEBUG
     feign: DEBUG
-    org.springframework.cloud.loadbalancer: DEBUG 
+    org.springframework.cloud.loadbalancer: DEBUG
+
+# 카카오 로그인 설정 추가
+kakao:
+  client:
+    id: d076a1e351579df59c4f6c6149fe82e7
+    redirect-uri: http://localhost/kakao-callback 

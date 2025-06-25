@@ -5,6 +5,8 @@ import com.myhomego.auth.dto.AuthDto;
 import com.myhomego.auth.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,15 +24,36 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class AuthServiceImpl implements AuthService {
 
     private final UserServiceClient userServiceClient;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate; // 내부 서비스 통신용 (LoadBalanced)
+    private final RestTemplate externalRestTemplate; // 외부 API 통신용
     private final AuthenticationManager authenticationManager;
+    
+    @Value("${kakao.client.id}")
+    private String kakaoClientId;
+    
+    @Value("${kakao.client.redirect-uri}")
+    private String kakaoRedirectUri;
+    
+    public AuthServiceImpl(
+            UserServiceClient userServiceClient,
+            PasswordEncoder passwordEncoder,
+            JwtUtil jwtUtil,
+            @Qualifier("restTemplate") RestTemplate restTemplate,
+            @Qualifier("externalRestTemplate") RestTemplate externalRestTemplate,
+            AuthenticationManager authenticationManager) {
+        this.userServiceClient = userServiceClient;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+        this.restTemplate = restTemplate;
+        this.externalRestTemplate = externalRestTemplate;
+        this.authenticationManager = authenticationManager;
+    }
 
     @Override
     public AuthDto.LoginResponse login(AuthDto.LoginRequest request) {
@@ -105,5 +128,171 @@ public class AuthServiceImpl implements AuthService {
                 .userId(kakaoId)
                 .userName("카카오 사용자")
                 .build();
+    }
+
+    @Override
+    public Map<String, Object> processKakaoLogin(String code) {
+        // 1. 카카오 토큰 받기
+        String kakaoToken = getKakaoToken(code);
+        
+        // 2. 카카오 사용자 정보 받기
+        Map<String, Object> userInfo = getKakaoUserInfo(kakaoToken);
+        
+        // 3. 사용자 정보로 회원가입 또는 로그인 처리
+        String userId = "kakao_" + userInfo.get("id");
+        
+        // 4. 유저 서비스에서 사용자 조회
+        boolean userExists = checkIfUserExists(userId);
+        
+        if (!userExists) {
+            // 사용자가 없으면 등록
+            createKakaoUser(userId, userInfo);
+        }
+        
+        // 5. JWT 토큰 생성
+        String userName = (String) userInfo.getOrDefault("nickname", "카카오 사용자");
+        String userEmail = (String) userInfo.getOrDefault("email", userId + "@kakao.com");
+        String token = jwtUtil.createToken(userId, userEmail, userName);
+        
+        return Map.of("token", token, "userInfo", userInfo);
+    }
+
+    /**
+     * 카카오 액세스 토큰 받기
+     */
+    private String getKakaoToken(String code) {
+        try {
+            log.info("카카오 토큰 요청: code={}", code);
+            
+            String kakaoTokenUrl = "https://kauth.kakao.com/oauth/token";
+            
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add("grant_type", "authorization_code");
+            params.add("client_id", kakaoClientId);
+            params.add("redirect_uri", kakaoRedirectUri);
+            params.add("code", code);
+            
+            log.debug("카카오 토큰 요청 설정: clientId={}, redirectUri={}", kakaoClientId, kakaoRedirectUri);
+            
+            // 외부 API 통신에는 LoadBalanced가 아닌 externalRestTemplate 사용
+            ResponseEntity<Map> response = externalRestTemplate.postForEntity(
+                kakaoTokenUrl, 
+                params, 
+                Map.class
+            );
+            
+            log.info("카카오 토큰 응답: {}", response.getBody());
+            return (String) response.getBody().get("access_token");
+        } catch (Exception e) {
+            log.error("카카오 토큰 요청 오류: ", e);
+            throw new RuntimeException("카카오 토큰 요청 실패", e);
+        }
+    }
+
+    /**
+     * 카카오 사용자 정보 받기
+     */
+    private Map<String, Object> getKakaoUserInfo(String accessToken) {
+        try {
+            log.info("카카오 사용자 정보 요청: token={}", accessToken);
+            
+            String kakaoUserInfoUrl = "https://kapi.kakao.com/v2/user/me";
+            
+            // 헤더 설정
+            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+            headers.set("Authorization", "Bearer " + accessToken);
+            
+            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(headers);
+            
+            // 외부 API 통신에는 LoadBalanced가 아닌 externalRestTemplate 사용
+            ResponseEntity<Map> response = externalRestTemplate.exchange(
+                kakaoUserInfoUrl,
+                org.springframework.http.HttpMethod.GET,
+                entity,
+                Map.class
+            );
+            
+            log.info("카카오 사용자 정보 응답: {}", response.getBody());
+            
+            Map<String, Object> userInfo = new HashMap<>();
+            Map<String, Object> body = response.getBody();
+            
+            userInfo.put("id", body.get("id"));
+            
+            // properties에서 닉네임과 프로필 이미지 추출
+            if (body.containsKey("properties")) {
+                Map<String, Object> properties = (Map<String, Object>) body.get("properties");
+                userInfo.put("nickname", properties.get("nickname"));
+                
+                if (properties.containsKey("profile_image")) {
+                    userInfo.put("profileImage", properties.get("profile_image"));
+                }
+            }
+            
+            // kakao_account에서 이메일 추출
+            if (body.containsKey("kakao_account")) {
+                Map<String, Object> kakaoAccount = (Map<String, Object>) body.get("kakao_account");
+                
+                if (kakaoAccount.containsKey("email")) {
+                    userInfo.put("email", kakaoAccount.get("email"));
+                }
+            }
+            
+            return userInfo;
+        } catch (Exception e) {
+            log.error("카카오 사용자 정보 요청 오류: ", e);
+            throw new RuntimeException("카카오 사용자 정보 요청 실패", e);
+        }
+    }
+
+    /**
+     * 유저 서비스에서 사용자 존재 여부 확인
+     */
+    private boolean checkIfUserExists(String userId) {
+        try {
+            log.info("사용자 존재 여부 확인: userId={}", userId);
+            
+            // 유저 서비스 API 호출
+            ResponseEntity<Map<String, Object>> response = userServiceClient.checkUserExistsById(userId);
+            
+            if (response.getBody() != null && response.getBody().containsKey("exists")) {
+                boolean exists = (boolean) response.getBody().get("exists");
+                log.info("사용자 존재 여부 결과: {}", exists);
+                return exists;
+            }
+            
+            return false;
+        } catch (Exception e) {
+            log.error("사용자 존재 여부 확인 오류: ", e);
+            return false;
+        }
+    }
+
+    /**
+     * 카카오 사용자 정보로 회원가입
+     */
+    private void createKakaoUser(String userId, Map<String, Object> userInfo) {
+        try {
+            log.info("카카오 사용자 등록: userId={}, userInfo={}", userId, userInfo);
+            
+            // 임의 비밀번호 생성 (사용자는 비밀번호 알 필요 없음)
+            String randomPassword = java.util.UUID.randomUUID().toString();
+            String encryptedPassword = passwordEncoder.encode(randomPassword);
+            
+            // 사용자 정보 객체 생성
+            Map<String, Object> user = new HashMap<>();
+            user.put("userId", userId);
+            user.put("userEmail", userInfo.getOrDefault("email", userId + "@kakao.com"));
+            user.put("userName", userInfo.getOrDefault("nickname", "카카오 사용자"));
+            user.put("userPwd", encryptedPassword);
+            user.put("phone", "010-0000-0000"); // 임시 전화번호
+            
+            // 유저 서비스 API 호출하여 사용자 생성
+            ResponseEntity<Map<String, Object>> response = userServiceClient.createUser(user);
+            log.info("카카오 사용자 등록 결과: {}", response.getBody());
+        } catch (Exception e) {
+            log.error("카카오 사용자 등록 오류: ", e);
+            throw new RuntimeException("카카오 사용자 등록 실패", e);
+        }
     }
 } 
