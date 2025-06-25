@@ -1,21 +1,26 @@
-//package com.group8.NotificationService.notification.infrastructure.fcm;
+package com.group8.NotificationService.notification.infrastructure.fcm;
 //
 //import com.google.firebase.messaging.FirebaseMessaging;
 //import com.google.firebase.messaging.Message;
 //import com.group8.NotificationService.notification.domain.FcmToken;
-//import com.group8.NotificationService.notification.domain.NotificationSender;
+import com.group8.NotificationService.notification.domain.NotificationSender;
 //import com.group8.NotificationService.notification.infrastructure.repository.FcmTokenRepository;
-//import lombok.RequiredArgsConstructor;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 //
-//@Slf4j
-//@Component
-//@RequiredArgsConstructor
-//public class FcmNotificationSender implements NotificationSender {
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class FcmNotificationSender implements NotificationSender {
 //
 //    private final FirebaseMessaging firebaseMessaging;
 //    private final FcmTokenRepository fcmTokenRepository;
+
+@Override
+    public void send(String userId, String message) {
+        System.out.println("Dummy sender: " + message);
+    }
 //
 //
 //    @Override
@@ -42,4 +47,4 @@
 //            log.error("message send failed", e);
 //        }
 //    }
-//}
+}
