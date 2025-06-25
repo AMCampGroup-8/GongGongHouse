@@ -1,14 +1,14 @@
 server:
-  port: 8080
+  port: 8086
 
 spring:
   kafka:
     bootstrap-servers: localhost:9092
 
   datasource:
-    url: jdbc:mysql://localhost:13306/notification?serverTimezone=UTC&useSSL=true&autoReconnect=true&useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: 1234
+    url: jdbc:mysql://localhost:3307/notification?serverTimezone=UTC&useSSL=true&autoReconnect=true&useUnicode=true&characterEncoding=utf-8
+    username: notification_user
+    password: noti1234
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connection-test-query: SELECT 1 # HikariCP 유효성 검사 추가

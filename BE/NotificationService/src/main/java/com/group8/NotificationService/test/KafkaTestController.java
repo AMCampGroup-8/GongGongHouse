@@ -14,7 +14,11 @@ public class KafkaTestController {
 
     @PostMapping("/like-tag")
     public String sendLikeTagEvent(@RequestBody LikeTagEvent event) {
-        kafkaTemplate.send("likedtag", event);
-        return "Kafka event sent successfully.";
+        try {
+            kafkaTemplate.send("likedtag", event);
+            return "Kafka event sent successfully.";
+        } catch (Exception e) {
+            return "Failed to send Kafka event: " + e.getMessage();
+        }
     }
 }
