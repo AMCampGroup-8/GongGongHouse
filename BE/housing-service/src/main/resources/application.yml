@@ -1,6 +1,6 @@
-lh-api:
-  base-url: https://apis.data.go.kr/B552555/lhNoticeInfo1/getNoticeInfo1
-  service-key: lQSP9FvGRXU/HHFK8bmllNrhzwyu+gM3tQuEBavnNP2XdaSRen6s9CKfj7IgYSgdIQnipKn69HgYsAe0u3QmgQ==
+#lh-api:
+#  base-url: https://apis.data.go.kr/B552555/lhNoticeInfo1/getNoticeInfo1
+#  service-key: lQSP9FvGRXU/HHFK8bmllNrhzwyu+gM3tQuEBavnNP2XdaSRen6s9CKfj7IgYSgdIQnipKn69HgYsAe0u3QmgQ==
 
 server:
   port: 8083
