@@ -26,7 +26,10 @@ services:
       - gonggong-net
 
   api-gateway:
-    build: ./BE/api-gateway
+    build: 
+      context: ./BE/api-gateway
+      dockerfile: Dockerfile
+    image: api-gateway:latest
     ports:
       - "8080:8080"
     depends_on:
@@ -54,7 +57,10 @@ services:
       - gonggong-net
 
   notification-service:
-    build: ./BE/notification-service
+    build: 
+      context: ./BE/NotificationService
+      dockerfile: Dockerfile
+    image: api-gateway:latest
     ports:
       - "8086:8086"
     environment:
@@ -102,7 +108,9 @@ services:
   #     - gonggong-net
 
   frontend:
-    build: ./FE
+    build:
+      context: ./FE/notification-service
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     networks:
