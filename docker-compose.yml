@@ -27,8 +27,13 @@ services:
     networks:
       - gonggong-net
 
+<<<<<<< Updated upstream
   mysql:
     image: mysql:8.0
+=======
+  api-gateway:
+    image: tndals61/api-gateway:0.0.1
+>>>>>>> Stashed changes
     ports:
       - "13306:3306"
     environment:
@@ -70,12 +75,18 @@ services:
       - gonggong-net
 
   notification-service:
+<<<<<<< Updated upstream
     build:
       context: ./BE/NotificationService
     ports:
       - "8086:8086"
     depends_on:
       - notification-db
+=======
+    image: tndals61/notification-service:0.0.1
+    ports:
+      - "8086:8080"
+>>>>>>> Stashed changes
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://notification-db:3306/notification
       SPRING_DATASOURCE_USERNAME: notification_user
@@ -94,6 +105,7 @@ services:
     networks:
       - gonggong-net
 
+<<<<<<< Updated upstream
   frontend:
     build:
       context: ./FE/gonggonghome
@@ -103,6 +115,18 @@ services:
       - api-gateway
     networks:
       - gonggong-net
+=======
+  # frontend:
+  #   build:
+  #     context: ./FE/notification-service
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - gonggong-net
+  #   depends_on:
+  #     - api-gateway
+>>>>>>> Stashed changes
 
 networks:
   gonggong-net:
