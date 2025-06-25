@@ -1,12 +1,12 @@
-spring:
-  config:
-    activate:
-      on-profile: dev
-
-  datasource:
-    url: jdbc:mariadb://localhost:3306/interest_db
-    username: root
-    password: 1234
-
 server:
   port: 8084
+
+spring:
+  datasource:
+    url: jdbc:mariadb://host.docker.internal:3306/interest_db
+    username: root
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

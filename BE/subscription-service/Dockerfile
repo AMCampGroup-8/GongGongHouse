@@ -20,3 +20,6 @@ ENV SPRING_CONFIG_LOCATION=file:/app/resources/
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+CMD ["java", "-jar", "app.jar", "--spring.profiles.active=dev"]
+
