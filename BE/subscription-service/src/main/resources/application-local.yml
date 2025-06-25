@@ -1,12 +1,15 @@
 spring:
-  config:
-    activate:
-      on-profile: local
-
   datasource:
-    url: jdbc:mariadb://localhost:3306/interest_db
+    url: jdbc:mariadb://192.168.0.5:3306/interest_db
     username: root
     password: 1234
+    driver-class-name: org.mariadb.jdbc.Driver
 
-server:
-  port: 8084
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+    show-sql: true
+    database-platform: org.hibernate.dialect.MariaDBDialect

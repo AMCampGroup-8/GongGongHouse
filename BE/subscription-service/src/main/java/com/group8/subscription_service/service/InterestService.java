@@ -35,7 +35,14 @@ public class InterestService {
 
 
     public InterestDto createInterest(Long memberId, InterestCreateRequestDto request) {
-        HousingDetailResponseDto housingDetail = housingClient.getHousingDetail(request.getAnnouncementId());
+        //연동 후 변경할 것!!!
+        //HousingDetailResponseDto housingDetail = housingClient.getHousingDetail(request.getAnnouncementId());
+
+        HousingDetailResponseDto housingDetail = new HousingDetailResponseDto();
+        housingDetail.setLocation("서울");
+        housingDetail.setStartDate(LocalDate.now());
+        housingDetail.setEndDate(LocalDate.now().plusDays(30));
+
 
         Interest interest = Interest.builder()
                 .memberId(memberId)
