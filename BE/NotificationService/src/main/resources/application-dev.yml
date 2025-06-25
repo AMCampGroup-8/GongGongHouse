@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  kafka:
+    bootstrap-servers: kafka:9092
+
+  datasource:
+    url: jdbc:mysql://mysql:3306/notification?serverTimezone=UTC&useSSL=true&autoReconnect=true&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-test-query: SELECT 1 # HikariCP 유효성 검사 추가
+      validation-timeout: 5000
+  jpa:
+    hibernate:
+      ddl-auto: create # 오직 테스트 환경에서만
+    generate-ddl: true # 오직 테스트 환경에서만(spring.jpa.generate-ddl)
+    show-sql: true
+    open-in-view: false
+
+firebase:
+  key-path: firebase/firebase-dev-key.json
