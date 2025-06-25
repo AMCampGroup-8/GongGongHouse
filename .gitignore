@@ -23,7 +23,5 @@
 hs_err_pid*
 replay_pid*
 /.idea
-/BE/NotificationService
-/FE/*
 .DS_Store
 BE/.DS_Store

@@ -1,0 +1,103 @@
+/* src/components/housinglist/HousingList.css */
+
+/* 🔹 전체 페이지 레이아웃 */
+.page-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px;
+    font-family: sans-serif;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* 🔹 필터 바 정렬 및 스타일 */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+    align-items: flex-end;
+}
+
+/* 공통 input 스타일 */
+.filter-bar input[type="text"],
+.filter-bar input[type="date"] {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: 36px;
+    font-size: 14px;
+    width: 130px;
+    box-sizing: border-box;
+}
+
+/* 🔹 날짜 필드 그룹 */
+.date-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.date-group label {
+    font-size: 12px;
+    margin-bottom: 2px;
+    color: #333;
+}
+
+/* 🔹 테이블 */
+.housing-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.housing-table th,
+.housing-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.housing-table th {
+    background-color: #f0f0f0;
+}
+
+.no-data {
+    text-align: center;
+    color: gray;
+    padding: 20px;
+}
+
+/* 🔹 페이지네이션 */
+.pagination {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.pagination button {
+    margin: 0 4px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+}
+
+/* 🔹 제목 링크 */
+.link-title {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.link-title:hover {
+    text-decoration: underline;
+}

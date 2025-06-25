@@ -1,0 +1,46 @@
+.detail-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 24px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: sans-serif;
+    background-color: #fafafa;
+}
+
+.detail-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.detail-item {
+    margin-bottom: 10px;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #444;
+    margin-right: 10px;
+}
+
+.supply-section {
+    margin-top: 30px;
+}
+
+.supply-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.supply-list {
+    list-style: disc;
+    padding-left: 20px;
+    color: #333;
+}
+
+.supply-empty {
+    color: #888;
+    font-style: italic;
+}

@@ -96,7 +96,7 @@ services:
 
   frontend:
     build:
-      context: ./FE/gonggonghome
+      context: ./FE/notification-service
     ports:
       - "3000:80"
     depends_on:

@@ -1,0 +1,44 @@
+/* src/pages/HousingPagedt.css */
+
+.detail-page-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* 🔙 목록으로 */
+.back-button {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.back-button:hover {
+    background-color: #d5d5d5;
+}
+
+/* ❤️ 관심등록 */
+.interest-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.interest-button:hover {
+    background-color: #d32f2f;
+}
