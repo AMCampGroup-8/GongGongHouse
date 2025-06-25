@@ -1,0 +1,48 @@
+.interest-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.left {
+  flex: 1;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.status {
+  color: orange;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.dates {
+  font-size: 14px;
+  color: #666;
+}
+
+.divider {
+  margin: 0 8px;
+}
+
+.heart-button {
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.2s ease;
+}
+
+.heart-button.liked {
+  color: red;
+}

@@ -1,0 +1,93 @@
+.detail-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.notice-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+  background: #f9f9ff;
+  position: relative;
+}
+
+.notice-card .badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: orange;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.notice-card h2 {
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
+
+.notice-card .region-tag {
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.notice-card .go-btn {
+  padding: 8px 16px;
+  background: #3a82f7;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+section {
+  margin-bottom: 30px;
+}
+
+section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 5px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+table th, table td {
+  text-align: left;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.supply-info {
+  display: flex;
+  gap: 10px;
+}
+
+.supply-box {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fafafa;
+}
+
+.btn-box {
+  text-align: center;
+}
+
+.back-btn {
+  padding: 10px 20px;
+  background: #555;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
