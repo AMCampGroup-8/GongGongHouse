@@ -1,0 +1,126 @@
+/* src/components/BoardDetail.module.css */
+
+/* 게시글 상세 컨테이너 */
+.boardDetailContainer {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* 게시글 제목 */
+.boardTitle {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 2.5em;
+  word-break: break-word; /* 긴 단어 줄바꿈 */
+}
+
+/* 작성자, 작성일 메타 정보 */
+.boardMeta {
+  text-align: center;
+  color: #7f8c8d;
+  font-size: 0.95em;
+  margin-bottom: 5px;
+}
+
+.boardMeta strong {
+  color: #34495e;
+}
+
+/* 구분선 */
+.divider {
+  border: 0;
+  height: 1px;
+  background: #eee;
+  margin: 25px 0;
+}
+
+/* 게시글 내용 */
+.boardContent {
+  min-height: 150px; /* 최소 높이 설정 */
+  line-height: 1.8;
+  color: #333;
+  text-align: left;
+  white-space: pre-wrap; /* 공백과 줄바꿈 유지 */
+  word-break: break-word;
+  padding: 10px 0;
+}
+
+.boardContent p {
+  margin-bottom: 1em;
+}
+
+/* 버튼 그룹 */
+.boardDetailActions {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* 버튼 간 간격 */
+  margin-top: 30px;
+}
+
+.boardDetailActions button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: white;
+}
+
+.editButton {
+  background-color: #3498db; /* 파란색 */
+}
+
+.editButton:hover {
+  background-color: #2980b9;
+}
+
+.deleteButton {
+  background-color: #e74c3c; /* 빨간색 */
+}
+
+.deleteButton:hover {
+  background-color: #c0392b;
+}
+
+.listButton {
+  background-color: #6c757d; /* 회색 */
+}
+
+.listButton:hover {
+  background-color: #5a6268;
+}
+
+/* 로딩 및 오류 메시지 스타일 (BoardList, BoardWrite와 일관성 유지) */
+.loadingMessage,
+.errorMessage,
+.notFoundMessage {
+  text-align: center;
+  font-size: 1.2em;
+  padding: 20px;
+  margin-top: 50px;
+  border-radius: 8px;
+}
+
+.loadingMessage {
+  background-color: #e0f7fa;
+  color: #00796b;
+  border: 1px solid #b2ebf2;
+}
+
+.errorMessage {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.notFoundMessage {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}

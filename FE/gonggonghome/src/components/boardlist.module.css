@@ -1,0 +1,122 @@
+/* src/components/BoardList.module.css */
+
+/* 전체 페이지의 기본 스타일 (이 부분은 전역적으로 적용됩니다) */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f7f6; /* 연한 회색 배경 */
+  color: #333; /* 기본 텍스트 색상 */
+  margin: 0;
+  padding: 20px;
+}
+
+/* 게시글 목록 전체를 감싸는 컨테이너 */
+.boardListContainer { /* 클래스 이름이 camelCase로 변경됨 */
+  max-width: 800px; /* 최대 너비 설정 */
+  margin: 20px auto; /* 중앙 정렬 */
+  padding: 25px;
+  background-color: #ffffff; /* 흰색 배경 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* 그림자 효과 */
+}
+
+/* 페이지 제목 */
+.boardListContainer h1 {
+  text-align: center;
+  color: #2c3e50; /* 진한 파란색 계열 */
+  margin-bottom: 30px;
+  font-size: 2.2em;
+}
+
+/* 새 게시글 작성 버튼 */
+.boardListContainer button {
+  display: block; /* 블록 요소로 만들어 중앙 정렬 가능하게 */
+  margin: 0 auto 25px 80%; /* 중앙 정렬 및 하단 여백 */
+  padding: 12px 25px;
+  background-color: #3498db; /* 파란색 */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* 호버 시 부드러운 전환 */
+}
+
+.boardListContainer button:hover {
+  background-color: #2980b9; /* 호버 시 더 진한 파란색 */
+}
+
+/* 게시글 목록 (ul) */
+.boardListContainer ul {
+  list-style: none; /* 기본 리스트 스타일 제거 */
+  padding: 0;
+  margin: 0;
+}
+
+/* 각 게시글 항목 (li) */
+.boardListContainer li {
+  background-color: #fdfdfd; /* 연한 배경 */
+  border: 1px solid #e0e0e0; /* 연한 테두리 */
+  border-radius: 6px;
+  margin-bottom: 15px;
+  padding: 15px 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* 연한 그림자 */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* 호버 시 부드러운 전환 */
+}
+
+.boardListContainer li:hover {
+  transform: translateY(-3px); /* 호버 시 살짝 위로 */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* 호버 시 그림자 강조 */
+}
+
+/* 게시글 제목과 버튼들을 감싸는 헤더 부분 */
+.boardHeader { /* 클래스 이름이 camelCase로 변경됨 */
+  display: flex; /* Flexbox로 제목과 버튼 정렬 (현재 버튼은 없지만 구조 유지) */
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* 게시글 제목 (h2) */
+.boardHeader h2 { /* h2는 boardHeader의 자식이므로 이렇게 선택 */
+  font-size: 1.5em;
+  color: #34495e; /* 진한 회색 */
+  cursor: pointer; /* 클릭 가능한 커서 */
+  text-decoration: none; /* 기본 밑줄 제거 */
+  transition: color 0.2s ease;
+  margin: 0; /* 기본 마진 제거 */
+}
+
+.boardHeader h2:hover {
+  color: #3498db; /* 호버 시 파란색 */
+  text-decoration: underline; /* 호버 시 밑줄 */
+}
+
+/* 게시글 상세 내용 (확장 시 보이는 부분) */
+.boardContentDetails { /* 클래스 이름이 camelCase로 변경됨 */
+  padding-top: 10px;
+  border-top: 1px solid #eee; /* 상단에 연한 구분선 */
+  margin-top: 10px;
+}
+
+.boardContentDetails p {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.boardContentDetails p:last-child {
+  margin-bottom: 0;
+  font-size: 0.9em;
+  color: #7f8c8d; /* 작성자/작성일은 연한 색상 */
+}
+
+/* 로딩 및 오류 메시지 스타일 */
+.loadingMessage, .errorMessage { /* 클래스 이름이 camelCase로 변경됨 */
+  text-align: center;
+  font-size: 1.2em;
+  padding: 20px;
+  margin-top: 50px;
+  color: #555;
+}
+
+.errorMessage { /* 클래스 이름이 camelCase로 변경됨 */
+  color: #e74c3c; /* 오류 메시지는 빨간색 */
+}
