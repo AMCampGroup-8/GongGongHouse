@@ -1,0 +1,75 @@
+.page-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px;
+    font-family: sans-serif;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-bar input {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.housing-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.housing-table th, .housing-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.housing-table th {
+    background-color: #f0f0f0;
+}
+
+.no-data {
+    text-align: center;
+    color: gray;
+    padding: 20px;
+}
+
+.pagination {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.pagination button {
+    margin: 0 4px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+}
+.link-title {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.link-title:hover {
+    text-decoration: underline;
+}

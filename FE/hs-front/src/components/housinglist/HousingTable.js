@@ -1,36 +1,39 @@
-import React from "react";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const HousingTable = ({ notices }) => {
     return (
-        <table className="w-full table-auto border">
-            <thead className="bg-gray-100">
+        <table className="housing-table">
+            <thead>
             <tr>
-                <th className="border px-4 py-2">제목</th>
-                <th className="border px-4 py-2">기관</th>
-                <th className="border px-4 py-2">지역</th>
-                <th className="border px-4 py-2">공급유형</th>
-                <th className="border px-4 py-2">면적(㎡)</th>
-                <th className="border px-4 py-2">공고일</th>
-                <th className="border px-4 py-2">마감일</th>
+                <th>제목</th>
+                <th>기관</th>
+                <th>지역</th>
+                <th>유형</th>
+                <th>면적(㎡)</th>
+                <th>기간</th>
             </tr>
             </thead>
             <tbody>
             {notices.length === 0 ? (
-                <tr>
-                    <td colSpan="7" className="text-center py-4">
-                        공고가 없습니다.
-                    </td>
-                </tr>
+                <tr><td colSpan="6" className="no-data">공고가 없습니다.</td></tr>
             ) : (
-                notices.map((notice) => (
-                    <tr key={notice.id}>
-                        <td className="border px-4 py-2">{notice.title}</td>
-                        <td className="border px-4 py-2">{notice.agency}</td>
-                        <td className="border px-4 py-2">{notice.location}</td>
-                        <td className="border px-4 py-2">{notice.type}</td>
-                        <td className="border px-4 py-2">{notice.supplyArea}</td>
-                        <td className="border px-4 py-2">{notice.startDate}</td>
-                        <td className="border px-4 py-2">{notice.endDate}</td>
+                notices.map((item) => (
+                    <tr key={item.id}>
+                        <td>
+                            <Link
+                                to={`/housing/${item.id}`}
+                                state={item}
+                                className="link-title"
+                            >
+                                {item.title}
+                            </Link>
+                        </td>
+                        <td>{item.agency}</td>
+                        <td>{item.location}</td>
+                        <td>{item.type}</td>
+                        <td>{item.supplyArea}</td>
+                        <td>{item.startDate} ~ {item.endDate}</td>
                     </tr>
                 ))
             )}
