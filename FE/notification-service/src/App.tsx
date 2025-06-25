@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import NotificationPage from './components/NotificationPage';
 import NavBar from './components/NavBar';  // 종 아이콘 들어간 NavBar

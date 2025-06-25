@@ -27,3 +27,5 @@ replay_pid*
 /BE/api-gateway/
 /BE/api-gateway/.gradle/
 FE/.DS_Store
+BE/.DS_Store
+.DS_Store

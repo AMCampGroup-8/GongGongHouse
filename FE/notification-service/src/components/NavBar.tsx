@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
 import { BellIcon } from "@heroicons/react/24/outline";
 import { getUserIdFromToken } from "../utils/jwt";
+import { useEffect, useState } from "react";
 
 type Notification = {
   notificationId: number;
