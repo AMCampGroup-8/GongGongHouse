@@ -1,8 +1,14 @@
 import axios from "axios";
 
+// 환경에 따른 baseURL 설정
+const getBaseUrl = () => {
+  const isDocker = process.env.NODE_ENV === 'production';
+  return isDocker ? "" : "http://localhost:8000";
+};
+
 // 공통 설정된 Axios 인스턴스
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: getBaseUrl(),
   headers: {
     "Content-Type": "application/json",
   },

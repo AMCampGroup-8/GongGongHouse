@@ -1,0 +1,56 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: user-service
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:mariadb://mariadb:3306/myhomego_user?allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: 1234
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MariaDBDialect
+  cloud:
+    config:
+      enabled: false
+  security:
+    user:
+      name: user
+      password: password
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  tracing:
+    sampling:
+      probability: 1.0
+
+logging:
+  level:
+    com.myhomego.user: DEBUG
+    org.springframework.cloud.netflix.eureka: DEBUG
+    com.netflix.discovery: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.cloud.openfeign: DEBUG 

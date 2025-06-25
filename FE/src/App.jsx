@@ -3,7 +3,7 @@ import UserMainPage from "./pages/UserMainPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import "./App.css";
-import ChatGpt from "./pages/ChatGpt";
+// import ChatGpt from "./pages/ChatGpt";  // 파일이 존재하지 않아 주석 처리
 import MainPage from "./pages/MainPage";
 import AnnouncementList from "./pages/AnnouncementList";
 import Layout from "./components/announcementlist/Layout";
@@ -19,6 +19,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<Layout />}>
+          {/* ChatGpt 컴포넌트가 없어 주석 처리
           <Route
             path="/chatgpt"
             element={
@@ -27,6 +28,7 @@ export default function App() {
               </PrivateRoute>
             }
           />
+          */}
           <Route
             path="/announcementList"
             element={

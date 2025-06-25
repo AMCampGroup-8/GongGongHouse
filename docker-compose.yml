@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  # MariaDB
+  mariadb:
+    image: mariadb:10.6
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3307:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./DB/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - myhomego-network
+
+  # Eureka Server
+  eureka-server:
+    build:
+      context: ./BE/eureka-server
+      dockerfile: Dockerfile
+    container_name: eureka-server
+    restart: always
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - myhomego-network
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./BE/api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+    networks:
+      - myhomego-network
+
+  # Auth Service
+  auth-service:
+    build:
+      context: ./BE/auth-service
+      dockerfile: Dockerfile
+    container_name: auth-service
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb:3306/myhomego_auth?allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=1234
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    depends_on:
+      - mariadb
+      - eureka-server
+    networks:
+      - myhomego-network
+
+  # User Service
+  user-service:
+    build:
+      context: ./BE/user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb:3306/myhomego_user?allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=1234
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    depends_on:
+      - mariadb
+      - eureka-server
+    networks:
+      - myhomego-network
+
+  # Frontend
+  frontend:
+    build:
+      context: ./FE
+      dockerfile: Dockerfile
+    container_name: frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - api-gateway
+      - auth-service
+      - user-service
+    networks:
+      - myhomego-network
+
+networks:
+  myhomego-network:
+    driver: bridge
+
+volumes:
+  mariadb_data:
+    driver: local 

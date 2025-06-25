@@ -1,0 +1,86 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: auth-service
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:mariadb://mariadb:3306/myhomego_auth?allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: 1234
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MariaDBDialect
+  cloud:
+    config:
+      enabled: false
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  tracing:
+    sampling:
+      probability: 1.0
+
+jwt:
+  secret: aesf0j38fjlqwkrj01i93u50niklsdjfkajsdfoi213u20kjsdfk3u92ljksdfi12k3jhsdfakjsdf
+  expiration: 3600000  # 1시간 (밀리초 단위)
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 10000
+        loggerLevel: full
+  hystrix:
+    enabled: true
+  circuitbreaker:
+    enabled: true
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+  okhttp:
+    enabled: true
+
+ribbon:
+  ConnectTimeout: 10000
+  ReadTimeout: 10000
+  MaxAutoRetries: 1
+  MaxAutoRetriesNextServer: 2
+  eureka:
+    enabled: true
+
+logging:
+  level:
+    com.myhomego.auth: DEBUG
+    org.springframework.cloud.netflix.eureka: DEBUG
+    com.netflix.discovery: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.cloud.openfeign: DEBUG
+    feign: DEBUG
+    org.springframework.cloud.loadbalancer: DEBUG 
