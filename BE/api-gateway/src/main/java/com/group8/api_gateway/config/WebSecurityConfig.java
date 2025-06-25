@@ -7,48 +7,43 @@ import com.group8.api_gateway.security.jwt.JwtTokenValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebFluxSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final RestAuthenticationEntryPoint authenticationEntryPoint;
     private final RestAccessDeniedHandler accessDeniedHandler;
     private final JwtTokenValidator jwtTokenValidator;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
-        http.
-                cors(httpSecurityCorsConfigurer -> {
-                    httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
-                })
-                .csrf(AbstractHttpConfigurer::disable)
-                .securityMatcher("/**")
-                .sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .addFilterBefore(
-                        new JwtAuthenticationFilter(jwtTokenValidator),
-                        UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling((exceptionConfig) ->
-                        exceptionConfig
-                                .authenticationEntryPoint(authenticationEntryPoint)
-                                .accessDeniedHandler(accessDeniedHandler))
-                .authorizeHttpRequests(registry -> registry.requestMatchers("/**").permitAll() //TODO: 필터 패턴 바꿔야함
-                        .anyRequest().authenticated()
-                );
-        return http.build();
+    @Order(1)
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+        return http
+                .cors(corsSpec -> corsSpec.configurationSource(corsConfigurationSource()))
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .authorizeExchange(authorizeExchangeSpec -> authorizeExchangeSpec
+                        .pathMatchers("/actuator/**").permitAll()
+                        .pathMatchers("/**").permitAll()
+                        .anyExchange().authenticated()
+                )
+                .exceptionHandling(exceptionHandlingSpec -> exceptionHandlingSpec
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
+                )
+                .addFilterAt(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+                .build();
     }
 
     @Bean
@@ -62,8 +57,8 @@ public class WebSecurityConfig {
         config.setExposedHeaders(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",config);
+        source.registerCorsConfiguration("/**", config);
 
         return source;
     }
-}
+} 

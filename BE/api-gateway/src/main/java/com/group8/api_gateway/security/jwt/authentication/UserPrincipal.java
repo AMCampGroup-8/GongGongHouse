@@ -47,4 +47,4 @@ public class UserPrincipal implements Principal {
         int result = userId != null ? userId.hashCode() :0;
         return result;
     }
-}
+} 

@@ -11,4 +11,4 @@ import org.springframework.stereotype.Component;
 public class JwtConfigProperties {
     private String header;
     private String secretKey;
-}
+} 

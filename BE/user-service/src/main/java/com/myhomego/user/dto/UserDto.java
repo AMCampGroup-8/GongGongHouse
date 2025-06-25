@@ -12,9 +12,9 @@ public class UserDto {
     @AllArgsConstructor
     public static class Request {
         private String userId;
-        private String email;
-        private String password;
-        private String name;
+        private String userEmail;
+        private String userPwd;
+        private String userName;
         private String phone;
     }
 
@@ -24,9 +24,9 @@ public class UserDto {
     @AllArgsConstructor
     public static class SignUpRequest {
         private String userId;
-        private String email;
-        private String password;
-        private String name;
+        private String userEmail;
+        private String userPwd;
+        private String userName;
         private String phone;
     }
 
@@ -35,9 +35,9 @@ public class UserDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UpdateRequest {
-        private String name;
+        private String userName;
         private String phone;
-        private String password;
+        private String userPwd;
     }
 
     @Data
@@ -45,8 +45,8 @@ public class UserDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class LoginRequest {
-        private String email;
-        private String password;
+        private String userId;
+        private String userPwd;
     }
 
     @Data
@@ -56,8 +56,9 @@ public class UserDto {
     public static class Response {
         private Long id;
         private String userId;
-        private String email;
-        private String name;
+        private String userEmail;
+        private String userName;
+        private String userPwd;
         private String phone;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;

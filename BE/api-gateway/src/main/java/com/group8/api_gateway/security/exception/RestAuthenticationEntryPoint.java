@@ -1,29 +1,30 @@
 package com.group8.api_gateway.security.exception;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Component
-public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    @Autowired
-    private HandlerExceptionResolver handlerExceptionResolver;
+public class RestAuthenticationEntryPoint implements ServerAuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        Exception exception = authException;
-        Throwable cause = authException.getCause();
-        if (cause instanceof ResourceAccessException accessException) {
-            exception = accessException;
-        }
-        handlerExceptionResolver.resolveException(request, response, null, exception);
+    public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException e) {
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(HttpStatus.UNAUTHORIZED);
+        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+        
+        String errorMessage = "{\"error\":\"Unauthorized\",\"message\":\"" + e.getMessage() + "\"}";
+        byte[] bytes = errorMessage.getBytes(StandardCharsets.UTF_8);
+        DataBuffer buffer = response.bufferFactory().wrap(bytes);
+        
+        return response.writeWith(Mono.just(buffer));
     }
-}
+} 

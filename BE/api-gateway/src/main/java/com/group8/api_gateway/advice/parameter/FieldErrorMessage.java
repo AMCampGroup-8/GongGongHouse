@@ -15,5 +15,4 @@ public class FieldErrorMessage {
         this.field = field;
         this.message = message;
     }
-}
-
+} 

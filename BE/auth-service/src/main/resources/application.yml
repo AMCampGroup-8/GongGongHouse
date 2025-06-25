@@ -31,10 +31,11 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
     prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
   client:
     register-with-eureka: true
     fetch-registry: true
-    serviceUrl:
+    service-url:
       defaultZone: http://localhost:8761/eureka/
 
 management:
@@ -48,14 +49,45 @@ management:
 
 jwt:
   secret: aesf0j38fjlqwkrj01i93u50niklsdjfkajsdfoi213u20kjsdfk3u92ljksdfi12k3jhsdfakjsdf
+  expiration: 3600000  # 1시간 (밀리초 단위)
 
 feign:
   client:
     config:
       default:
-        connectTimeout: 5000
-        readTimeout: 5000
+        connectTimeout: 10000
+        readTimeout: 10000
         loggerLevel: full
+  hystrix:
+    enabled: true
+  circuitbreaker:
+    enabled: true
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+  okhttp:
+    enabled: true
+
+ribbon:
+  ConnectTimeout: 10000
+  ReadTimeout: 10000
+  MaxAutoRetries: 1
+  MaxAutoRetriesNextServer: 2
+  eureka:
+    enabled: true
+
+# 로깅 설정 추가
+logging:
+  level:
+    com.myhomego.auth: DEBUG
+    org.springframework.cloud.netflix.eureka: DEBUG
+    com.netflix.discovery: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.cloud.openfeign: DEBUG
+    feign: DEBUG
+    org.springframework.cloud.loadbalancer: DEBUG
 
 ---
 spring:

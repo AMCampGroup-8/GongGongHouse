@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.0'
-    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.springframework.boot' version '3.5.2'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.myhomego'
@@ -22,7 +22,7 @@ repositories {
 }
 
 ext {
-    set('springCloudVersion', "2023.0.0")
+    set('springCloudVersion', "2025.0.0")
 }
 
 dependencies {
@@ -37,9 +37,9 @@ dependencies {
     
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
     
     implementation 'io.micrometer:micrometer-tracing'
     implementation 'io.micrometer:micrometer-tracing-bridge-brave'

@@ -1,23 +1,30 @@
 package com.group8.api_gateway.security.exception;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.server.authorization.ServerAccessDeniedHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Component
-@RequiredArgsConstructor
-public class RestAccessDeniedHandler implements AccessDeniedHandler {
-    private final HandlerExceptionResolver handlerExceptionResolver;
+public class RestAccessDeniedHandler implements ServerAccessDeniedHandler {
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        handlerExceptionResolver.resolveException(request, response, null, accessDeniedException);
+    public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException e) {
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(HttpStatus.FORBIDDEN);
+        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+        
+        String errorMessage = "{\"error\":\"Forbidden\",\"message\":\"" + e.getMessage() + "\"}";
+        byte[] bytes = errorMessage.getBytes(StandardCharsets.UTF_8);
+        DataBuffer buffer = response.bufferFactory().wrap(bytes);
+        
+        return response.writeWith(Mono.just(buffer));
     }
-}
+} 

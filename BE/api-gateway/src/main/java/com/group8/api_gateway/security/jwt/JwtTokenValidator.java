@@ -7,8 +7,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -58,8 +58,6 @@ public class JwtTokenValidator {
 
         UserPrincipal userPrincipal = new UserPrincipal(userId);
         return new JwtAuthentication(userPrincipal, token, getGrantedAuthorities("user"));
-
-
     }
 
     private Claims verifyAndGetClaims(String token) {
@@ -84,17 +82,12 @@ public class JwtTokenValidator {
         return grantedAuthorities;
     }
 
-    public String getToken(HttpServletRequest request) {
-        String authHeader = getAuthHeaderFromHeader(request);
+    public String getToken(ServerHttpRequest request) {
+        List<String> headers = request.getHeaders().get(configProperties.getHeader());
+        String authHeader = headers != null && !headers.isEmpty() ? headers.get(0) : null;
         if (authHeader != null && authHeader.startsWith("Bearer")) {
             return authHeader.substring(7);
         }
         return null;
     }
-
-    private String getAuthHeaderFromHeader(HttpServletRequest request) {
-        return request.getHeader(configProperties.getHeader());
-    }
-
-
-}
+} 

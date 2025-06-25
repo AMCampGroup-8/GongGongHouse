@@ -21,25 +21,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(name = "user_id", nullable = false, unique = true, length = 50)
     private String userId;
 
-    @Column(nullable = false, unique = true, length = 100)
-    private String email;
+    @Column(name = "user_email", nullable = false, unique = true, length = 100)
+    private String userEmail;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String password;
+    @Column(name = "user_pwd", nullable = false, columnDefinition = "TEXT")
+    private String userPwd;
 
-    @Column(nullable = false, length = 50)
-    private String name;
+    @Column(name = "user_name", nullable = false, length = 50)
+    private String userName;
 
-    @Column(nullable = false, length = 20)
+    @Column(name = "phone", nullable = false, length = 20)
     private String phone;
 
     @CreatedDate
-    @Column(updatable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @Column
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 } 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "@/apis/axiosInstance";
+import axiosInstance from "@/apis/axiosInstance";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -34,8 +34,9 @@ export default function RegisterPage() {
     }
 
     try {
-      const res = await axios.get(
-        `http://localhost:8080/api/user/check-id?userId=${form.id}`
+      // axiosInstance 사용
+      const res = await axiosInstance.get(
+        `/user-service/api/users/check-userId?userId=${form.id}`
       );
 
       if (res.data.exists) {
@@ -88,7 +89,8 @@ export default function RegisterPage() {
     }
 
     try {
-      await axios.post("http://localhost:8080/api/user/register", {
+      // axiosInstance 사용
+      await axiosInstance.post("/user-service/api/users", {
         userId: id,
         userEmail: email,
         userPwd: password,

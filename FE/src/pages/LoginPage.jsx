@@ -1,7 +1,7 @@
 // src/pages/LoginPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "@/apis/axiosInstance";
+import axiosInstance from "@/apis/axiosInstance";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -18,12 +18,24 @@ export default function LoginPage() {
     }
 
     try {
-      const response = await axios.post("http://localhost:8080/api/user/login", {
+      console.log("로그인 시도:", { userId: loginId, userPwd: password });
+      
+      const response = await axiosInstance.post("/auth-service/api/auth/login", {
         userId: loginId,
         userPwd: password,
       });
 
-      const token = response.data;
+      console.log("로그인 응답:", response.data);
+      const token = response.data.token;
+      console.log("받은 토큰:", token);
+      
+      // 토큰 형식 확인
+      if (token && typeof token === 'string' && token.split('.').length === 3) {
+        console.log("올바른 JWT 토큰 형식입니다.");
+      } else {
+        console.warn("JWT 토큰 형식이 올바르지 않습니다:", token);
+      }
+      
       localStorage.setItem("accessToken", token);
 
       setError("");
@@ -31,6 +43,10 @@ export default function LoginPage() {
       navigate("/");
     } catch (err) {
       console.error("로그인 실패:", err);
+      if (err.response) {
+        console.error("에러 응답:", err.response.data);
+        console.error("상태 코드:", err.response.status);
+      }
       setError("로그인에 실패했습니다. 아이디 또는 비밀번호를 확인하세요.");
     }
   };

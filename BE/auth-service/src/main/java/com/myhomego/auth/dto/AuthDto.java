@@ -1,37 +1,50 @@
 package com.myhomego.auth.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 public class AuthDto {
 
-    @Data
+    @Getter
+    @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class LoginRequest {
-        private String email;
-        private String password;
+        private String userId;
+        private String userPwd;
     }
 
-    @Data
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LoginResponse {
+        private String userId;
+        private String userEmail;
+        private String userName;
+        private String token;
+    }
+
+    @Getter
+    @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class TokenResponse {
         private String token;
         private String userId;
-        private String name;
+        private String userName;
     }
 
-    @Data
+    @Getter
+    @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class KakaoLoginRequest {
         private String code;
         private String redirectUri;
+        private String accessToken;
     }
 } 

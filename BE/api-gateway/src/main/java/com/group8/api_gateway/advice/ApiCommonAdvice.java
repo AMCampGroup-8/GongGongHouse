@@ -14,7 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @Order(value = 1)
@@ -48,11 +48,16 @@ public class ApiCommonAdvice {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({NoResourceFoundException.class})
-    public ApiResponseDto<String> handleNoResourceFoundException(NoResourceFoundException e) {
+    @ExceptionHandler({ResponseStatusException.class})
+    public ApiResponseDto<String> handleResponseStatusException(ResponseStatusException e) {
+        if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+            return ApiResponseDto.createError(
+                    "NoResource",
+                    "리소스를 찾을 수 없습니다.");
+        }
         return ApiResponseDto.createError(
-                "NoResource",
-                "리소스를 찾을 수 없습니다.");
+                "Error",
+                e.getReason());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -82,4 +87,4 @@ public class ApiCommonAdvice {
                 "ServerError",
                 "서버 에러입니다.");
     }
-}
+} 

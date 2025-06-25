@@ -1,6 +1,6 @@
 import InfoCard from "@/components/main_page/infoCard";
 import React, { useEffect, useState } from "react";
-import axios from "@/apis/axiosInstance";
+import axiosInstance from "@/apis/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
 const cardList = [
@@ -9,34 +9,86 @@ const cardList = [
   { image: "/images/newlyweds.png", link: "/announcementList?search=신혼" },
 ];
 
+// JWT 토큰 디코딩 함수
+const decodeJwtToken = (token) => {
+  try {
+    // 토큰이 유효한 형식인지 확인
+    if (!token || typeof token !== 'string' || !token.includes('.')) {
+      console.error('유효하지 않은 토큰 형식:', token);
+      return null;
+    }
+    
+    // 토큰 구조 확인 및 로깅
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      console.error('JWT 토큰은 3개 부분(header.payload.signature)으로 구성되어야 합니다.');
+      return null;
+    }
+    
+    console.log('토큰 구조:', {
+      header: parts[0],
+      payload: parts[1],
+      signature: parts[2]
+    });
+    
+    // Base64 디코딩 시도
+    try {
+      // Base64 URL 디코딩을 위한 패딩 추가
+      const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      const pad = base64.length % 4;
+      const paddedBase64 = pad ? base64 + '='.repeat(4 - pad) : base64;
+      
+      const decodedPayload = JSON.parse(atob(paddedBase64));
+      console.log('디코딩된 페이로드:', decodedPayload);
+      return decodedPayload;
+    } catch (error) {
+      console.error('Base64 디코딩 오류:', error);
+      return null;
+    }
+  } catch (error) {
+    console.error('토큰 디코딩 중 오류 발생:', error);
+    return null;
+  }
+};
+
 export default function MainPage() {
   const [userName, setUserName] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    // console.log("accessToken:", token);
+    console.log("저장된 accessToken:", token);
 
     if (!token) {
       console.warn("accessToken이 없음. API 요청 안 함.");
       return;
     }
 
-    axios
-      .get("http://localhost:8080/api/user/get-user", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        // console.log("✅ 사용자 응답:", res.data);
-        setUserName(res.data.userName);
-      })
-      .catch((err) => {
-        console.error("사용자 정보 불러오기 실패:", err);
-      });
+    // JWT 토큰 디코딩하여 userId 추출
+    const decodedPayload = decodeJwtToken(token);
+    
+    if (decodedPayload) {
+      // userId는 sub 또는 userId 필드에 있을 수 있음
+      const userId = decodedPayload.sub || decodedPayload.userId;
+      
+      if (userId) {
+        console.log("추출된 userId:", userId);
+        
+        // 사용자 정보 요청
+        axiosInstance
+          .get(`/user-service/api/users/userId/${userId}`)
+          .then((res) => {
+            console.log("사용자 응답:", res.data);
+            setUserName(res.data.userName);
+          })
+          .catch((err) => {
+            console.error("사용자 정보 불러오기 실패:", err);
+          });
+      } else {
+        console.error("토큰에서 userId를 찾을 수 없습니다.");
+      }
+    }
   }, []);
-
 
   const handleCardClick = (link) => {
     if (!userName) {

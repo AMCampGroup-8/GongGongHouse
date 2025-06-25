@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto.Response createUser(UserDto.SignUpRequest userDto) {
-        if (userRepository.existsByEmail(userDto.getEmail())) {
+        if (userRepository.existsByUserEmail(userDto.getUserEmail())) {
             throw new RuntimeException("이미 존재하는 이메일입니다.");
         }
         
@@ -39,9 +39,9 @@ public class UserServiceImpl implements UserService {
 
         User user = User.builder()
                 .userId(userDto.getUserId())
-                .email(userDto.getEmail())
-                .password(passwordEncoder.encode(userDto.getPassword()))
-                .name(userDto.getName())
+                .userEmail(userDto.getUserEmail())
+                .userPwd(passwordEncoder.encode(userDto.getUserPwd()))
+                .userName(userDto.getUserName())
                 .phone(userDto.getPhone())
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -60,9 +60,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDto.Response getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다. Email: " + email));
+    public UserDto.Response getUserByUserEmail(String userEmail) {
+        User user = userRepository.findByUserEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다. Email: " + userEmail));
+        return mapToDto(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDto.Response getUserByUserId(String userId) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
         return mapToDto(user);
     }
 
@@ -87,16 +95,16 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다. ID: " + userId));
 
-        if (userDto.getName() != null) {
-            user.setName(userDto.getName());
+        if (userDto.getUserName() != null) {
+            user.setUserName(userDto.getUserName());
         }
         
         if (userDto.getPhone() != null) {
             user.setPhone(userDto.getPhone());
         }
         
-        if (userDto.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        if (userDto.getUserPwd() != null) {
+            user.setUserPwd(passwordEncoder.encode(userDto.getUserPwd()));
         }
 
         user.setUpdatedAt(LocalDateTime.now());
@@ -115,8 +123,8 @@ public class UserServiceImpl implements UserService {
     
     @Override
     @Transactional(readOnly = true)
-    public boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
+    public boolean existsByUserEmail(String userEmail) {
+        return userRepository.existsByUserEmail(userEmail);
     }
     
     @Override
@@ -127,12 +135,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username)
+        User user = userRepository.findByUserId(username)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username));
 
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
+                user.getUserId(),
+                user.getUserPwd(),
                 new ArrayList<>());
     }
 
@@ -140,8 +148,9 @@ public class UserServiceImpl implements UserService {
         return UserDto.Response.builder()
                 .id(user.getId())
                 .userId(user.getUserId())
-                .email(user.getEmail())
-                .name(user.getName())
+                .userEmail(user.getUserEmail())
+                .userName(user.getUserName())
+                .userPwd(user.getUserPwd())
                 .phone(user.getPhone())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())

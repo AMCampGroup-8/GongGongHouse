@@ -4,9 +4,13 @@ import com.group8.api_gateway.common.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestController("openGatewayController")
@@ -16,5 +20,13 @@ public class GatewayController {
     @GetMapping(value = "/hello")
     public ApiResponseDto<String> test() {
         return ApiResponseDto.createOk("안녕 쿠버네티스");
+    }
+    
+    @GetMapping(value = "/test")
+    public ResponseEntity<Map<String, String>> testEndpoint() {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("message", "API Gateway is working!");
+        return ResponseEntity.ok(response);
     }
 }

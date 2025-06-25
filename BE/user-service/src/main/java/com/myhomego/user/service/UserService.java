@@ -10,11 +10,12 @@ import java.util.List;
 public interface UserService extends UserDetailsService {
     UserDto.Response createUser(UserDto.SignUpRequest userDto);
     UserDto.Response getUserById(Long userId);
-    UserDto.Response getUserByEmail(String email);
+    UserDto.Response getUserByUserEmail(String userEmail);
+    UserDto.Response getUserByUserId(String userId);
     List<UserDto.Response> getAllUsers();
     Page<UserDto.Response> getUsersPage(Pageable pageable);
     UserDto.Response updateUser(Long userId, UserDto.UpdateRequest userDto);
     void deleteUser(Long userId);
-    boolean existsByEmail(String email);
+    boolean existsByUserEmail(String userEmail);
     boolean existsByUserId(String userId);
 } 
