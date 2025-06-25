@@ -1,4 +1,5 @@
 import React from "react";
+import './HousingList.css';
 
 const HousingFilterBar = ({ filters, setFilters }) => {
     const handleChange = (e) => {
@@ -7,14 +8,13 @@ const HousingFilterBar = ({ filters, setFilters }) => {
     };
 
     return (
-        <div className="mb-6 flex flex-wrap gap-4 items-center">
+        <div className="filter-bar">
             <input
                 type="text"
                 name="title"
                 value={filters.title}
                 onChange={handleChange}
-                placeholder="공고명 검색"
-                className="border px-3 py-1 rounded"
+                placeholder="공고명"
             />
             <input
                 type="text"
@@ -22,7 +22,6 @@ const HousingFilterBar = ({ filters, setFilters }) => {
                 value={filters.region}
                 onChange={handleChange}
                 placeholder="지역"
-                className="border px-3 py-1 rounded"
             />
             <input
                 type="text"
@@ -30,34 +29,32 @@ const HousingFilterBar = ({ filters, setFilters }) => {
                 value={filters.agency}
                 onChange={handleChange}
                 placeholder="기관"
-                className="border px-3 py-1 rounded"
             />
             <input
                 type="text"
                 name="type"
                 value={filters.type}
                 onChange={handleChange}
-                placeholder="공급 유형"
-                className="border px-3 py-1 rounded"
+                placeholder="유형"
             />
-            <div>
-                <label className="mr-2">시작일</label>
+
+            <div className="date-group">
+                <label>시작일</label>
                 <input
                     type="date"
                     name="startDate"
                     value={filters.startDate}
                     onChange={handleChange}
-                    className="border px-2 py-1 rounded"
                 />
             </div>
-            <div>
-                <label className="mr-2">종료일</label>
+
+            <div className="date-group">
+                <label>종료일</label>
                 <input
                     type="date"
                     name="endDate"
                     value={filters.endDate}
                     onChange={handleChange}
-                    className="border px-2 py-1 rounded"
                 />
             </div>
         </div>
