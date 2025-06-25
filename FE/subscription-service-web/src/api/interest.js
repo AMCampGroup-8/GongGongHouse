@@ -2,7 +2,8 @@ import axios from 'axios';
 
 // src/api/interest.js
 const api = axios.create({
-  baseURL: "http://localhost:8084", // ✅ 포트 꼭 8084로!!!
+  baseURL: process.env.REACT_APP_API_BASE_URL,
+
   headers: {
     Authorization: 'Bearer test', // memberId = 1L
   },
